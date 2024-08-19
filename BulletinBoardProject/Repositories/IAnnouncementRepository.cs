@@ -6,5 +6,6 @@ namespace BulletinBoardProject.Repositories
     {
         Task<IEnumerable<Announcement>> GetFromTenDaysAgoAsync();
         Task<Announcement> AddAsync(Announcement announcement);
+        Task<Announcement> GetByIdAsync(int id);
     }
 }

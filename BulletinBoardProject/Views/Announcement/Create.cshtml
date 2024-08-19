@@ -6,10 +6,15 @@
 
 <h2>Create Announcement</h2>
 
-<form asp-action="Add" method="post">
+<div id="success-message" class="alert alert-success alert-dismissible fade show d-none" role="alert">
+    <span id="success-text"></span>
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+
+<form asp-action="Add" method="post" id="create-form">
     <div class="form-group">
         <label asp-for="Title" class="control-label"></label>
-        <input asp-for="Title" class="form-control" />
+        <input asp-for="Title" class="form-control" id="Title" />
         <span asp-validation-for="Title" class="text-danger"></span>
     </div>
     <div class="form-group">
@@ -17,7 +22,34 @@
         <textarea asp-for="Description" class="form-control"></textarea>
         <span asp-validation-for="Description" class="text-danger"></span>
     </div>
-    <div class="form-group">
+    <div class="form-group mt-3">
         <input type="submit" value="Create" class="btn btn-primary" />
     </div>
 </form>
+
+@section Scripts {
+    <script>
+        // Show success message if it exists (on load after successfully adding an announcement)
+        window.onload = function () {
+            var successMessage = localStorage.getItem('successMessage');
+            if (successMessage) {
+                var successDiv = document.getElementById('success-message');
+                var successText = document.getElementById('success-text');
+                successText.textContent = successMessage;
+                successDiv.classList.remove('d-none');
+                localStorage.removeItem('successMessage');
+            }
+        };
+
+        // Handle form submission with confirmation
+        document.getElementById('create-form').onsubmit = function () {
+            var title = document.getElementById('Title').value;
+            if (confirm('Are you sure you want to add an announcement with the following title: ' + title + '?')) {
+                localStorage.setItem('successMessage', 'Announcement added successfully!');
+                return true;
+            } else {
+                return false;
+            }
+        };
+    </script>
+}

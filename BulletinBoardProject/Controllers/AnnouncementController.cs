@@ -19,6 +19,12 @@ namespace BulletinBoardProject.Controllers
         {
             return View();
         }
+        [HttpGet]
+        public async Task<IActionResult> Details(int id)
+        {
+            var announcement = await _announcementRepository.GetByIdAsync(id);
+            return View(announcement);
+        }
 
         [HttpPost]
         public async Task<IActionResult> Add(AddAnnouncementRequest request)
@@ -32,7 +38,11 @@ namespace BulletinBoardProject.Controllers
 
             await _announcementRepository.AddAsync(announcement);
 
-            return RedirectToAction("Index", "Home");
+            // Store success message in localStorage
+            TempData["SuccessMessage"] = "Announcement added successfully!";
+            HttpContext.Response.Cookies.Append("SuccessMessage", "Announcement added successfully!");
+
+            return RedirectToAction("Create");
         }
     }
 }

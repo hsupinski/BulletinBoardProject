@@ -1,0 +1,23 @@
+﻿@model BulletinBoardProject.Models.Domain.Announcement
+
+@{
+    ViewData["Title"] = "Announcement Details";
+}
+
+<div class="container mt-5">
+    <div class="card">
+        <div class="card-header text-center">
+            <h2>@Model.Title</h2>
+        </div>
+        <div class="card-body">
+            <p class="lead">@Model.Description</p>
+        </div>
+        <div class="card-footer text-muted text-center">
+            <small>Posted on @Model.CreatedAt.ToString("MMMM dd, yyyy 'at' HH:mm")</small>
+        </div>
+    </div>
+
+    <div class="text-center mt-4">
+        <a href="@Url.Action("Index", "Home")" class="btn btn-primary">Back to Announcements</a>
+    </div>
+</div>

@@ -1,12 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
-
-namespace BulletinBoardProject.Models.ViewModels
+﻿namespace BulletinBoardProject.Models.ViewModels
 {
-    public class AnnouncementViewModel : Controller
+    public class AnnouncementViewModel
     {
-        public IActionResult Index()
-        {
-            return View();
-        }
+        public int Id { get; set; }
+        public string Title { get; set; }
+        public string Description { get; set; }
+        public DateTime CreatedAt { get; set; }
     }
 }

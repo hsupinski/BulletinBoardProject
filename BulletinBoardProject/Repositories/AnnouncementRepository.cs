@@ -28,5 +28,11 @@ namespace BulletinBoardProject.Repositories
                 .Where(a => a.CreatedAt >= tenDaysAgo)
                 .ToListAsync();
         }
+
+        public async Task<Announcement> GetByIdAsync(int id)
+        {
+            return await _context.Announcements
+                .FirstOrDefaultAsync(a => a.Id == id);
+        }
     }
 }

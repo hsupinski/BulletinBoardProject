@@ -1,4 +1,6 @@
 using BulletinBoardProject.Models;
+using BulletinBoardProject.Models.Domain;
+using BulletinBoardProject.Models.ViewModels;
 using BulletinBoardProject.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
@@ -15,11 +17,33 @@ namespace BulletinBoardProject.Controllers
             _announcementRepository = announcementRepository;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index(int page = 1)
         {
-            var announcementList = _announcementRepository.GetFromTenDaysAgoAsync();
+            var pageSize = 5; // set to 100 if needed
+            var announcements = await _announcementRepository.GetFromTenDaysAgoAsync();
 
-            return View();
+            var totalAnnouncements = announcements.Count();
+
+            var announcementsDisplayed = announcements
+                .OrderByDescending(a => a.CreatedAt)
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToList();
+
+            var viewModel = new AnnouncementListViewModel
+            {
+                Announcements = announcementsDisplayed.Select(a => new AnnouncementViewModel
+                {
+                    Id = a.Id,
+                    Title = a.Title,
+                    CreatedAt = a.CreatedAt,
+                    Description = a.Description
+                }).ToList(),
+                CurrentPage = page,
+                TotalPages = (int)Math.Ceiling(totalAnnouncements / (double)pageSize)
+            };
+
+            return View(viewModel);
         }
 
         public IActionResult Privacy()
