@@ -1,4 +1,5 @@
 using BulletinBoardProject.Models;
+using BulletinBoardProject.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
@@ -7,14 +8,17 @@ namespace BulletinBoardProject.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-
-        public HomeController(ILogger<HomeController> logger)
+        private readonly IAnnouncementRepository _announcementRepository;
+        public HomeController(ILogger<HomeController> logger, IAnnouncementRepository announcementRepository)
         {
             _logger = logger;
+            _announcementRepository = announcementRepository;
         }
 
         public IActionResult Index()
         {
+            var announcementList = _announcementRepository.GetFromTenDaysAgoAsync();
+
             return View();
         }
 

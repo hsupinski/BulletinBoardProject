@@ -1,4 +1,5 @@
 using BulletinBoardProject.Data;
+using BulletinBoardProject.Repositories;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -9,6 +10,8 @@ builder.Services.AddControllersWithViews();
 var connectionString = builder.Configuration.GetConnectionString("AnnouncementDbContextConnection");
 builder.Services.AddDbContext<AnnouncementDbContext>(options =>
     options.EnableSensitiveDataLogging().UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
+
+builder.Services.AddScoped<IAnnouncementRepository, AnnouncementRepository>();
 
 var app = builder.Build();
 
