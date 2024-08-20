@@ -36,12 +36,15 @@ namespace BulletinBoardProject.Controllers
                 Description = request.Description,
             };
 
+            if (string.IsNullOrEmpty(announcement.Title) || string.IsNullOrEmpty(announcement.Description))
+            {
+                TempData["ErrorMessage"] = "Failed to add announcement. Title and description are required.";
+                return RedirectToAction("Create");
+            }
+
             await _announcementRepository.AddAsync(announcement);
 
-            // Store success message in localStorage
             TempData["SuccessMessage"] = "Announcement added successfully!";
-            HttpContext.Response.Cookies.Append("SuccessMessage", "Announcement added successfully!");
-
             return RedirectToAction("Create");
         }
     }
